@@ -3,7 +3,7 @@ function getDistance(x1, y1, x2, y2) {
         let dist = Math.sqrt((x1 - x2)**2 + (y1 - y2)**2);
         return Number.isInteger(dist) ? dist : Math.trunc(dist * 100)/100;
     } else {
-        throw new Error('Числа должны быть в пределах -1000; 1000');
+        throw new Error();
     }
 }
 
@@ -13,7 +13,7 @@ function isValid(num) {
 
 function switchPlaces(arr) {
     if (!Array.isArray(arr)) {
-        throw new Error('Входящий аргумент должен быть массивом');
+        throw new Error();
     }
     if (arr.length == 0) {
         return arr;
@@ -41,6 +41,6 @@ function getDivisors(num) {
       
         return divisors.sort((a, b) => b - a);
     } else {
-        throw new Error('Невалидный ввод');
+        throw new Error();
     }
 }
