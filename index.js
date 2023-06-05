@@ -115,9 +115,9 @@ function createProxy(obj) {
                 } else {
                     return false;
                 }
-            } else {
+            } else if (typeof prop === "string" || typeof prop === "number" || typeof prop === "symbol") {
                 target[prop] = { value, readAmount: 0 };
-            }
+            } else return false;
 
             return true;
         },
