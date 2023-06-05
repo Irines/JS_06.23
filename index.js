@@ -1,46 +1,125 @@
-function getDistance(x1, y1, x2, y2) {
-    if(isValid(x1) && isValid(y1) && isValid(x2) && isValid(y2)) {
-        let dist = Math.sqrt((x1 - x2)**2 + (y1 - y2)**2);
-        return Number.isInteger(dist) ? dist : Math.trunc(dist * 100)/100;
+function makeDeepCopy(obj) {
+    if (typeof obj !== "object" || obj == null || obj instanceof Map || obj instanceof Set || Array.isArray(obj)) {
+        throw new Error();
     } else {
-        throw new Error();
+        let copy = recursiveCopy(obj);
+        return copy;
     }
 }
 
-function isValid(num) {
-    return num >= -1000 && num <= 1000 && !isNaN(num)
+function getStringType(value) {
+    let _toString = Object.prototype.toString;
+    let str = _toString.call(value);
+    return str.slice(8, -1);
 }
 
-function switchPlaces(arr) {
-    if (!Array.isArray(arr)) {
-        throw new Error();
-    }
-    if (arr.length == 0) {
-        return arr;
+// WeakMap is used to keep track of already copied objects and prevent looping when copying objects with circular references.
+function recursiveCopy(target, map = new WeakMap()) {
+    // clone primitive types
+    if (typeof target != "object" || target == null) {
+        return target;
     }
 
-    let middleIndex = Math.floor(arr.length / 2);
-    let firstHalf = arr.slice(0, middleIndex);
-    let secondHalf = arr.length % 2 !== 0 ? arr.slice(middleIndex + 1) : arr.slice(middleIndex);
-    return arr.length % 2 !== 0 ? [...secondHalf, arr[middleIndex], ...firstHalf] : [...secondHalf, ...firstHalf];
-}
+    const type = getStringType(target);
+    let cloneTarget = null;
 
-function getDivisors(num) {
-    if (Number.isFinite(num) && !Number.isNaN(num)) {
-        let divisors = [];
-        const sqrt = Math.floor(Math.sqrt(num));
-      
-        for (let i = 1; i <= sqrt; i++) {
-          if (num % i === 0) {
-            divisors.push(i);
-            if (i !== sqrt) {
-              divisors.push(num / i);
-            }
-          }
+    if (map.get(target)) {
+        return map.get(target);
+    }
+    map.set(target, cloneTarget);
+
+    // in case if String/Number/Boolean created with function-constructor
+    if (type != "Set" && type != "Map" && type != "Array" && type != "Object") {
+        return target;
+    }
+
+    // clone Set
+    if (type == "Set") {
+        cloneTarget = new Set();
+        target.forEach((value) => {
+            cloneTarget.add(recursiveCopy(value, map));
+        });
+        return cloneTarget;
+    }
+
+    // clone Map
+    if (type == "Map") {
+        cloneTarget = new Map();
+        target.forEach((value, key) => {
+            cloneTarget.set(key, recursiveCopy(value, map));
+        });
+        return cloneTarget;
+    }
+
+    // clone Array
+    if (type == "Array") {
+        cloneTarget = new Array();
+        for (const key in target) {
+            cloneTarget[key] = recursiveCopy(target[key], map);
         }
-      
-        return divisors.sort((a, b) => b - a);
-    } else {
+        return cloneTarget;
+    }
+
+    // clone Object
+    if (type == "Object") {
+        cloneTarget = new Object();
+        for (const key in target) {
+            cloneTarget[key] = recursiveCopy(target[key], map);
+        }
+        return cloneTarget;
+    }
+
+    return cloneTarget;
+}
+
+function createIterable(from, to) {
+    let iterable = {
+        from: from,
+        to: to,
+        [Symbol.iterator]: function () {
+            return {
+                current: this.from,
+                last: this.to,
+                next() {
+                    if (this.current <= this.last) {
+                        return { done: false, value: this.current++ };
+                    } else {
+                        return { done: true };
+                    }
+                },
+            };
+        },
+    };
+
+    return iterable;
+}
+
+function createProxy(obj) {
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
         throw new Error();
     }
+
+    return new Proxy(obj, {
+        get(target, prop) {
+            if (prop in target) {
+                target[prop].readAmount = (target[prop].readAmount || 0) + 1;
+                return target[prop].value;
+            }
+            return undefined;
+        },
+        set(target, prop, value) {
+            if (prop in target) {
+                const existingValue = target[prop].value;
+                if (typeof existingValue === typeof value) {
+                    target[prop].value = value;
+                } else {
+                    return false;
+                }
+            } else {
+                target[prop] = { value, readAmount: 0 };
+            }
+
+            return true;
+        },
+    });
 }
