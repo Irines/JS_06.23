@@ -2,7 +2,7 @@ const myCustomFilter = function (callback, contextObj = null) {
     if (!callback || typeof callback !== "function") {
         throw new Error("Invalid argument.");
     }
-    if (contextObj && typeof contextObj !== "object") {
+    if (contextObj && typeof contextObj !== "object" || Array.isArray(contextObj)) {
         throw new Error("Invalid argument.");
     }
     let filteredArr = [];
@@ -52,11 +52,11 @@ const validateArr = (arr) => {
     }
 };
 
-const storageWrapper = (callback, arr = null) => {
+const storageWrapper = (callback, arr) => {
     if (!callback || typeof callback !== "function") {
         throw new Error("Invalid argument.");
     }
-    if (arr && !Array.isArray(arr)) {
+    if (arr && !Array.isArray(arr) || arr === null) {
         throw new Error("Invalid argument.");
     }
 
