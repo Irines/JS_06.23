@@ -1,75 +1,57 @@
-const myCustomFilter = function (callback, contextObj = null) {
-    if (!callback || typeof callback !== "function") {
-        throw new Error("Invalid argument.");
-    }
-    if (contextObj && typeof contextObj !== "object" || Array.isArray(contextObj)) {
-        throw new Error("Invalid argument.");
-    }
-    let filteredArr = [];
-
-    for (let i = 0; i < this.length; i++) {
-        if (contextObj === null) {
-            if (callback(this[i], i, this)) {
-                filteredArr.push(this[i]);
-            }
-        } else {
-            if (callback.call(contextObj, this[i], i, this)) {
-                filteredArr.push(this[i]);
-            }
+const createDebounceFunction = (someCallback, time) => {
+    validateArguments(someCallback, time);
+    let timerId = null;
+    return function (...args) {
+        if (timerId) {
+            clearTimeout(timerId);
         }
-    }
-    return filteredArr;
+        timerId = setTimeout(() => someCallback(...args), time);
+    };
 };
 
-Array.prototype.customFilter = myCustomFilter;
-
-const bubbleSort = (input) => {
-    validateArr(input);
-    let arr = [...input];
-    for (let i = 0; i < arr.length - 1; i++) {
-        let swapDuringCycle = false;
-        for (let j = 0; j < arr.length - 1 - i; j++) {
-            if (arr[j] > arr[j + 1]) {
-                let save = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = save;
-                swapDuringCycle = true;
-            }
-        }
-        if (!swapDuringCycle) break;
-    }
-    return arr;
-};
-
-const validateArr = (arr) => {
-    if (!Array.isArray(arr)) {
+const validateArguments = (callback, time) => {
+    if (typeof callback !== "function") {
         throw new Error("Invalid argument.");
     }
-    for (let el of arr) {
-        if (typeof el !== "number" || isNaN(el) || !isFinite(el)) {
-            throw new Error("Invalid argument.");
-        }
+    if (typeof time !== "number" || isNaN(time) || !isFinite(time) || time < 0 || !Number.isInteger(time)) {
+        throw new Error("Invalid argument.");
     }
 };
 
-const storageWrapper = (callback, arr) => {
-    if (!callback || typeof callback !== "function") {
-        throw new Error("Invalid argument.");
-    }
-    if (arr && !Array.isArray(arr) || arr === null) {
-        throw new Error("Invalid argument.");
+class RickAndMorty {
+    getCharacter(characterId) {
+        validateId(characterId);
+        return fetch(`https://rickandmortyapi.com/api/character/${characterId}`)
+            .then((response) => {
+                if (response.status >= 400) {
+                    return null;
+                } else if (response.status == 200) {
+                    return response.json();
+                }
+            })
+            .then((character) => character)
+            .catch((error) => {
+                return null;
+            });
     }
 
-    let closuredArr = [];
-    if (!arr) {
-        return () => {
-            return (closuredArr = [...closuredArr, callback()]);
-        };
-    } else {
-        return () => {
-            const newVal = callback();
-            arr.push(newVal);
-            return newVal;
-        };
+    async getEpisode(episodeId) {
+        validateId(episodeId);
+        try {
+            const response = await fetch(`https://rickandmortyapi.com/api/episode/${episodeId}`);
+            if (response.status >= 400) {
+                return null;
+            } else if (response.status == 200) {
+                return await response.json();
+            }
+        } catch (error) {
+            return null;
+        }
+    }
+}
+
+const validateId = (id) => {
+    if (typeof id !== "number" || isNaN(id) || !isFinite(id) || id < 0 || !Number.isInteger(id)) {
+        throw new Error("Invalid argument id");
     }
 };
