@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Функция для отображения заметок
     function getNotes() {
         const notes = JSON.parse(localStorage.getItem("notes")) || [];
         switch (activeTab) {
@@ -96,17 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let tabContents = document.querySelectorAll(".tab-content");
         let tabLinks = document.querySelectorAll(".tab-link");
 
-        // Скрытие всех табов
         tabContents.forEach(function (content) {
             content.style.display = "none";
         });
 
-        // Удаление класса "active" у всех ссылок навигации
         tabLinks.forEach(function (link) {
             link.classList.remove("active");
         });
 
-        // Отображение выбранного таба
         document.getElementById(tabId).style.display = "block";
 
         // Добавление класса "active" к выбранной ссылке навигации
@@ -146,12 +144,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function setEventListenersForColorEl() {
         colorOptions.forEach((option) => {
             option.addEventListener("click", () => {
-                // Удалить класс "selected" у всех квадратов
                 colorOptions.forEach((opt) => {
                     opt.classList.remove("selected");
                 });
 
-                // Добавить класс "selected" для выбранного квадрата
                 option.classList.add("selected");
             });
         });
@@ -385,7 +381,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         favoriteBtn.addEventListener("click", () => {
             toggleFavoriteStatus(note.id, index); // Используется идентификатор заметки
-            // renderNotes();
         });
 
         return noteElement;
