@@ -1,0 +1,207 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap") 
+
+body  
+    font-family: "Roboto", sans-serif 
+    margin: 0 
+    padding: 20px 
+
+h1  
+    font-weight: 500 
+    margin-bottom: 20px  
+
+h2  
+    font-weight: 400 
+    margin-bottom: 10px 
+
+#search-input  
+    order: 2
+    margin-left: auto
+    box-sizing: border-box 
+    width: 50% 
+    height: 40px
+    padding: 8px 
+    border: none 
+    border-radius: 4px 
+    background-color: #F5F5F5 
+    font-size: 16px 
+    color: #333333 
+    transition: background-color 0.3s ease 
+
+#search-input:focus  
+    outline: none 
+    background-color: #E0E0E0 
+ 
+#titleInput,
+textarea  
+    width: 100% 
+    padding: 10px 
+    border: 1px solid #ccc 
+    border-radius: 4px 
+    font-size: 16px 
+    margin-bottom: 10px 
+    font-family: "Roboto", sans-serif
+
+#titleInput.error, textarea.error 
+  border: 1px solid red
+  &:focus 
+    outline: none
+
+#createNoteContainer
+    padding: 20px
+    padding-left: 0px
+    margin-bottom: 20px
+
+.note-input 
+  width: 100% 
+  padding: 10px 
+  border: 1px solid #ccc 
+  border-radius: 4px 
+  font-size: 16px 
+  margin-bottom: 10px 
+
+button  
+    background-color: #007bff 
+    color: #fff 
+    border: none 
+    border-radius: 4px 
+    padding: 10px 20px 
+    font-size: 16px 
+    cursor: pointer  
+
+button:hover  
+    background-color: #0056b3 
+ 
+.error  
+    border: 1px solid red 
+ 
+.notesList   
+    display: flex
+    flex-flow: column-reverse wrap
+    margin-bottom: 20px 
+
+.notesList > div  
+    padding: 20px 
+    border-radius: 4px 
+    margin-bottom: 10px 
+
+.notesList > div.updated  
+    background-color: #ffe0b2 
+
+.notesList strong  
+    font-weight: 500 
+
+.notesList p  
+    margin: 10px 0 
+ 
+.notesList button  
+    margin-right: 10px 
+
+.modal  
+    position: fixed
+    z-index: 9999
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    width: 400px 
+    max-width: 90% 
+    background-color: #ffffff 
+    border-radius: 4px 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) 
+    padding: 20px 
+    z-index: 30 
+    display: none
+    &.modal-title
+        font-size: 16px 
+        font-weight: bold 
+        margin-bottom: 10px 
+    &.modal-text
+        font-size: 14px 
+        margin-bottom: 20px 
+    &.modal-content  
+        width: 300px 
+        margin: 200px auto 
+        background-color: #fff 
+        padding: 20px 
+        border-radius: 5px 
+        text-align: center 
+        &.modal-buttons 
+            display: flex 
+            justify-content: flex-end  
+            margin-top: 20px 
+    &.button  
+        margin-left: 10px 
+        padding: 8px 16px 
+        border: none 
+        border-radius: 4px 
+        background-color: #e0e0e0 
+        color: #333333 
+        cursor: pointer 
+
+.color-options  
+    display: flex 
+    gap: 10px
+    margin-bottom: 20px
+ 
+.color-option 
+    display: inline-block
+    width: 50px
+    height: 50px
+    cursor: pointer
+    border-radius: 4px
+    border: 2px solid transparent
+
+.color-option:hover  
+    opacity: 0.8 
+    border-color: rgba(0, 128, 255, 0.5)
+ 
+
+.color-option.selected  
+    border-color: #0080FF
+
+.radiobtn
+    display: none 
+
+/* Стили для блока навигации */
+.navigation  
+  display: flex 
+  justify-content: flex-start 
+  align-items: center
+  margin-bottom: 20px 
+ 
+
+.nav-link  
+  margin-right: 10px 
+  text-decoration: none 
+  color: #333333 
+  font-weight: bold 
+  transition: color 0.3s 
+
+.nav-link.active  
+  color: #0069C0 
+
+.favorite-button  
+    display: inline-block 
+    background-color: transparent 
+    border: none 
+    padding: 10px 20px 
+    font-size: 16px 
+    color: #333333 
+    cursor: pointer 
+    // transition: color 0.3s 
+
+.favorite-button.active  
+    color: #FFCA28 
+
+.favorite-button:hover
+    color: #007bff 
+    background-color: transparent 
+    border: none 
+    cursor: pointer  
+
+.favorite-button:focus  
+  outline: none 
+
+.favorite-button::before  
+  content: '\2605' 
+  font-size: 18px 
+  margin-right: 6px
